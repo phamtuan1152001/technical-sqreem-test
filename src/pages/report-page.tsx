@@ -53,10 +53,9 @@ const ReportPage = () => {
 					<Alert
 						type="error"
 						message={t('report.fetchErrorTitle')}
-						description={t(error, { defaultValue: error })}
+						description={t(error)}
 						showIcon
 						closable
-						style={{ marginBottom: 8 }}
 					/>
 				)}
 
