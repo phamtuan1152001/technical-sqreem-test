@@ -1,6 +1,6 @@
+import { useRef } from 'react'
 import { Alert, Button, Card, Col, Row, Space, Spin, Typography, theme } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
-import { useRef } from 'react'
 import { useAppSelector } from '../app/hooks'
 import { exportHealthReportPdf } from '../utils/export-pdf'
 
@@ -21,15 +21,10 @@ const { Title, Text } = Typography
 const ReportPage = () => {
   const { token } = theme.useToken()
   const { report, loading, error } = useAppSelector((state) => state.healthReport)
-  console.log("ReportPage__data", report)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleExport = async () => {
-    try {
-      await exportHealthReportPdf(containerRef.current)
-    } catch (exportError) {
-      console.error(exportError)
-    }
+    await exportHealthReportPdf(containerRef.current)
   }
 
   if (loading) {
@@ -44,10 +39,10 @@ const ReportPage = () => {
 
   return (
     <Card variant="outlined" size="small">
-      <div ref={containerRef} style={{ padding: 12, background: token.colorBgContainer }}>
-        <Row justify="space-between" align="middle">
+      <div ref={containerRef} style={{ padding: 0, background: token.colorBgContainer }}>
+        <Row justify="space-between" align="middle" style={{paddingBottom: 12}}>
           <Title level={4}>Health Intelligence Dashboard</Title>
-          <Button type="primary" icon={<DownloadOutlined />} onClick={handleExport} disabled={!report}>
+          <Button className="no-export" type="primary" icon={<DownloadOutlined />} onClick={handleExport} disabled={!report}>
             Export as PDF
           </Button>
         </Row>
@@ -60,39 +55,50 @@ const ReportPage = () => {
           <Text type="secondary">Complete the form to trigger the AI-generated insights.</Text>
         ) : (
           <Space orientation="vertical" size="large" style={{ width: '100%' }}>
-            {/* Health summary section */}
-            <HealthSummary bmi={report.bmi} summary={report.healthSummary} />
+            <div className="pdf-section">
+              <HealthSummary bmi={report.bmi} summary={report.healthSummary} />
+            </div>
 
-            {/* Exercise calender section */}
-            <ExerciseCalenderTable weeklyExercisePlan={report.weeklyExercisePlan} />
+            <div className="pdf-section">
+              <ExerciseCalenderTable weeklyExercisePlan={report.weeklyExercisePlan} />
+            </div>
 
-            {/* Nutrition Breakdown and Exercise Effort chart section */}
             <Row gutter={[16, 16]}>
               <Col xs={24} md={12} xl={8}>
-                <NutritionBreakdownChart nutrition={report.nutritionBreakdown} />
+                <div className="pdf-section">
+                  <NutritionBreakdownChart nutrition={report.nutritionBreakdown} />
+                </div>
               </Col>
               <Col xs={24} md={12} xl={16}>
-                <ExerciseEffortChart effort={report.exerciseEffort} />
+                <div className="pdf-section">
+                  <ExerciseEffortChart effort={report.exerciseEffort} />
+                </div>
               </Col>
             </Row>
 
-            {/* Weight and Timeline progress section */}
             <Row gutter={[16, 16]}>
               <Col xs={24} lg={16}>
-                <WeightProgressChart progress={report.weightProgress} goalWeight={report.goalWeightKg} />
+                <div className="pdf-section">
+                  <WeightProgressChart progress={report.weightProgress} goalWeight={report.goalWeightKg} />
+                </div>
               </Col>
               <Col xs={24} lg={8}>
-                <TimelineProgress estimatedWeeksToGoal={report.estimatedWeeksToGoal} />
+                <div className="pdf-section">
+                  <TimelineProgress estimatedWeeksToGoal={report.estimatedWeeksToGoal} />
+                </div>
               </Col>
             </Row>
 
-            {/* Activity and Body composition section */}
             <Row gutter={[16, 16]}>
               <Col xs={24} lg={12}>
-                <ActivityCompositionChart composition={report.activityComposition} />
+                <div className="pdf-section">
+                  <ActivityCompositionChart composition={report.activityComposition} />
+                </div>
               </Col>
               <Col xs={24} lg={12}>
-                <BodyCompositionChart bodyComposition={report.bodyComposition} />
+                <div className="pdf-section">
+                  <BodyCompositionChart bodyComposition={report.bodyComposition} />
+                </div>
               </Col>
             </Row>
           </Space>
