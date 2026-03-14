@@ -52,7 +52,7 @@ const UserInputForm = () => {
 	}
 
 	return (
-		<Card variant="outlined" size="small" style={{height: '100%'}}>
+		<Card variant="outlined" size="small" style={{height: '100%', width: '100%'}}>
 			<Title level={4}>{t('form.title')}</Title>
 			<Text type="secondary">{t('form.description')}</Text>
 			<Form
@@ -85,12 +85,12 @@ const UserInputForm = () => {
 						</Col>
 					</Row>
 					<Row gutter={12}>
-						<Col xs={24} md={9}>
+						<Col xs={24} md={8}>
 							<Form.Item label={t('form.fields.goalWeightKg')} name="goalWeightKg" rules={numericRules}>
 								<InputNumber min={30} max={200} style={{ width: '100%' }} />
 							</Form.Item>
 						</Col>
-						<Col xs={24} md={15}>
+						<Col xs={24} md={16}>
 							<Form.Item label={t('form.fields.availableMinutesPerDay')} name="availableMinutesPerDay" rules={numericRules}>
 								<InputNumber min={10} max={240} style={{ width: '100%' }} />
 							</Form.Item>
