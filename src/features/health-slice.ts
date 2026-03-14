@@ -3,36 +3,36 @@ import { generateHealthReport } from './health-thunk'
 import type { HealthReport } from './types'
 
 interface HealthReportState {
-  loading: boolean
-  error: string | null
-  report: HealthReport | null
+	loading: boolean
+	error: string | null
+	report: HealthReport | null
 }
 
 const initialState: HealthReportState = {
-  loading: false,
-  error: null,
-  report: null,
+	loading: false,
+	error: null,
+	report: null,
 }
 
 const healthSlice = createSlice({
-  name: 'healthReport',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(generateHealthReport.pending, (state) => {
-        state.loading = true
-        state.error = null
-      })
-      .addCase(generateHealthReport.fulfilled, (state, action) => {
-        state.loading = false
-        state.report = action.payload
-      })
-      .addCase(generateHealthReport.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload ?? 'Unable to load a report right now.'
-      })
-  },
+	name: 'healthReport',
+	initialState,
+	reducers: {},
+	extraReducers: (builder) => {
+		builder
+			.addCase(generateHealthReport.pending, (state) => {
+				state.loading = true
+				state.error = null
+			})
+			.addCase(generateHealthReport.fulfilled, (state, action) => {
+				state.loading = false
+				state.report = action.payload
+			})
+			.addCase(generateHealthReport.rejected, (state, action) => {
+				state.loading = false
+				state.error = action.payload ?? 'Unable to load a report right now.'
+			})
+	},
 })
 
 export default healthSlice.reducer
