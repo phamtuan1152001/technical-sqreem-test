@@ -53,7 +53,7 @@ const ExerciseEffortChart = ({ effort }: ExerciseEffortChartProps) => {
 			],
 		},
 	}), [data, t, token.colorPrimary, token.colorPrimaryBgHover])
-	// console.log("ExerciseEffortChart___data", effort, data)
+	console.log("ExerciseEffortChart___data", effort, data)
 	return (
 		<Card size="small" variant="outlined">
 			<Title level={5}>{t('report.charts.exerciseEffort')}</Title>

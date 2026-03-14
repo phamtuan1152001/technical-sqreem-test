@@ -72,7 +72,7 @@ const BodyCompositionChart = ({ bodyComposition }: BodyCompositionChartProps) =>
 		token.colorPrimaryActive,
 		token.colorPrimaryBg,
 	])
-	// console.log("BodyCompositionChart___data", bodyComposition, data)
+	console.log("BodyCompositionChart___data", bodyComposition, data)
 	return (
 		<Card size="small" variant="outlined">
 			<Title level={5}>{t('report.charts.bodyComposition')}</Title>

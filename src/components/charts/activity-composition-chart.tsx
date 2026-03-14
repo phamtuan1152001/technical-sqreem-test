@@ -56,7 +56,7 @@ const ActivityCompositionChart = ({ composition }: ActivityCompositionChartProps
 			],
 		},
 	}), [data, token.colorPrimary, token.colorBgContainer])
-	// console.log("ActivityCompositionChart___data", {composition: Object.entries(composition), data})
+	console.log("ActivityCompositionChart___data", {compositionObject: Object.entries(composition), data, composition})
 	return (
 		<Card size="small" variant="outlined">
 			<Title level={5}>{t('report.charts.activityComposition')}</Title>

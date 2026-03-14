@@ -35,7 +35,7 @@ const ExerciseCalenderTable = ({ weeklyExercisePlan }: ExerciseCalenderTableProp
             render: (value: number) => t('report.table.units.calories', { value }),
         },
     ]
-
+    console.log("ExerciseCalenderTable___data", weeklyExercisePlan)
     return (
         <React.Fragment>
             <Title level={5}>{t('report.table.title')}</Title>

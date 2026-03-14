@@ -11,7 +11,7 @@ interface HealthSummaryProps {
 const HealthSummary = ({ bmi, summary }: HealthSummaryProps) => {
   const { token } = theme.useToken()
   const { t } = useTranslation()
-
+  console.log("HealthSummary___data", bmi, summary)
   return (
     <Card size="small" style={{ backgroundColor: token.colorBgElevated }}>
       <Row gutter={[12, 12]}>

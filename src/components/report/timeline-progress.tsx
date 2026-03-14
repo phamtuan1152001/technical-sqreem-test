@@ -16,7 +16,7 @@ const TimelineProgress = ({ estimatedWeeksToGoal }: TimelineProgressProps) => {
 	if (!estimatedWeeksToGoal) return 0
 	return Math.max(5, Math.min(100, 100 - Math.round((estimatedWeeksToGoal / 40) * 100)))
 	}, [estimatedWeeksToGoal])
-	// console.log("TimelineProgress___data", estimatedWeeksToGoal)
+	console.log("TimelineProgress___data", estimatedWeeksToGoal, timelinePercent)
 	return (
 		<Card size="small" variant="outlined">
 			<Title level={5}>{t('report.timeline.title')}</Title>

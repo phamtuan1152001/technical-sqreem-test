@@ -57,7 +57,7 @@ const NutritionBreakdownChart = ({ nutrition }: NutritionBreakdownChartProps) =>
 		},
 		color: [token.colorPrimary, token.colorPrimaryHover, token.colorPrimaryBg],
 	}), [data, token.colorPrimary, token.colorPrimaryHover, token.colorPrimaryBg])
-	// console.log("NutritionBreakdownChart___data", nutrition, data)
+	console.log("NutritionBreakdownChart___data", nutrition, data)
 	return (
 		<Card size="small" variant="outlined">
 			<Title level={5}>{t('report.charts.nutritionBreakdown')}</Title>

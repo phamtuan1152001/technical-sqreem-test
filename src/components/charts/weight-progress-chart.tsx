@@ -61,7 +61,7 @@ const WeightProgressChart = ({ progress, goalWeight }: WeightProgressChartProps)
 			],
 		},
 	}), [progress, goalWeight, t, token.colorBgContainer, token.colorPrimary, token.colorPrimaryBg])
-	// console.log("WeightProgressChart___data", progress, goalWeight)
+	console.log("WeightProgressChart___data", progress, goalWeight)
 	return (
 		<Card size="small" variant="outlined">
 			<Title level={5}>{t('report.charts.weightProgress')}</Title>
