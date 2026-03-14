@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import 'antd/dist/reset.css'
 import './index.css'
+import './i18n'
 import App from './App'
 import { store } from './app/store'
 

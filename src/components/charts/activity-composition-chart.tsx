@@ -3,6 +3,7 @@ import { Card, Typography, theme } from 'antd'
 import { Radar } from '@ant-design/charts'
 import type { ActivityComposition } from '../../features/types'
 import type { RadarConfig } from '@ant-design/charts'
+import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
 
@@ -10,17 +11,16 @@ interface ActivityCompositionChartProps {
 	composition: ActivityComposition
 }
 
-const toTitleCase = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
-
 const ActivityCompositionChart = ({ composition }: ActivityCompositionChartProps) => {
 	const { token } = theme.useToken()
+	const { t } = useTranslation()
 
 	const data = useMemo(() => {
 		return Object.entries(composition).map(([activity, value]) => ({
-			activity: toTitleCase(activity),
+			activity: t(`report.charts.labels.${activity}`, activity),
 			value,
 		}))
-	}, [composition])
+	}, [composition, t])
 
 	const config: RadarConfig = useMemo(() => ({
 		data,
@@ -55,11 +55,11 @@ const ActivityCompositionChart = ({ composition }: ActivityCompositionChartProps
 				}),
 			],
 		},
-	}), [data])
+	}), [data, token.colorPrimary, token.colorBgContainer])
 	// console.log("ActivityCompositionChart___data", {composition: Object.entries(composition), data})
 	return (
 		<Card size="small" variant="outlined">
-			<Title level={5}>Activity Composition</Title>
+			<Title level={5}>{t('report.charts.activityComposition')}</Title>
 			<Radar {...config} />
 		</Card>
 	)

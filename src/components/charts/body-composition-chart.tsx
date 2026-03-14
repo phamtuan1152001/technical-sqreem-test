@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { Card, Typography, theme } from 'antd'
 import { Pie } from '@ant-design/plots'
-import type { BodyComposition } from '../../features//types'
+import type { BodyComposition } from '../../features/types'
 import type { PieConfig } from '@ant-design/plots'
+import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
 
@@ -17,13 +18,17 @@ interface BodyCompositionDatum {
 
 const BodyCompositionChart = ({ bodyComposition }: BodyCompositionChartProps) => {
 	const { token } = theme.useToken()
+	const { t } = useTranslation()
 
-	const data: BodyCompositionDatum[] = [
-		{ type: 'Muscle', value: bodyComposition.musclePercent },
-		{ type: 'Fat', value: bodyComposition.fatPercent },
-		{ type: 'Water', value: bodyComposition.waterPercent },
-		{ type: 'Bone', value: bodyComposition.bonePercent },
-	]
+	const data: BodyCompositionDatum[] = useMemo(
+		() => [
+			{ type: t('report.charts.labels.muscle'), value: bodyComposition.musclePercent },
+			{ type: t('report.charts.labels.fat'), value: bodyComposition.fatPercent },
+			{ type: t('report.charts.labels.water'), value: bodyComposition.waterPercent },
+			{ type: t('report.charts.labels.bone'), value: bodyComposition.bonePercent },
+		],
+		[bodyComposition, t],
+	)
 
 	const config: PieConfig = useMemo(() => ({
 		data,
@@ -70,7 +75,7 @@ const BodyCompositionChart = ({ bodyComposition }: BodyCompositionChartProps) =>
 	// console.log("BodyCompositionChart___data", bodyComposition, data)
 	return (
 		<Card size="small" variant="outlined">
-			<Title level={5}>Body Composition</Title>
+			<Title level={5}>{t('report.charts.bodyComposition')}</Title>
 			<Pie {...config} />
 		</Card>
 	)

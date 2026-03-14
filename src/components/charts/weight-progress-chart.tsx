@@ -3,6 +3,7 @@ import { Card, Typography, theme } from 'antd'
 import { Line } from '@ant-design/plots'
 import type { WeightProgressPoint } from '../../features/types'
 import type { LineConfig } from '@ant-design/plots'
+import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
 
@@ -13,6 +14,7 @@ interface WeightProgressChartProps {
 
 const WeightProgressChart = ({ progress, goalWeight }: WeightProgressChartProps) => {
 	const { token } = theme.useToken()
+	const { t } = useTranslation()
 
 	const config: LineConfig = useMemo(() => ({
 		data: progress,
@@ -42,27 +44,27 @@ const WeightProgressChart = ({ progress, goalWeight }: WeightProgressChartProps)
 			},
 		},
 		tooltip: {
-			title: (d: WeightProgressPoint) => `Week: ${d.week}`,
+			title: (d: WeightProgressPoint) => t('report.charts.labels.week', { week: d.week }),
 			items: [
 				(d: WeightProgressPoint) => ({
-					name: 'Current',
-					value: `${d.weightKg} kg`,
+					name: t('report.charts.labels.current'),
+					value: t('report.charts.units.kg', { value: d.weightKg }),
 				}),
 				(_: WeightProgressPoint) => ({
-					name: 'Goal',
-					value: `${goalWeight} kg`,
+					name: t('report.charts.labels.goal'),
+					value: t('report.charts.units.kg', { value: goalWeight }),
 				}),
 				(d: WeightProgressPoint) => ({
-					name: 'Gap',
-					value: `${(d.weightKg - goalWeight).toFixed(1)} kg`,
+					name: t('report.charts.labels.gap'),
+					value: t('report.charts.units.kg', { value: (d.weightKg - goalWeight).toFixed(1) }),
 				}),
 			],
 		},
-	}), [progress, goalWeight])
+	}), [progress, goalWeight, t, token.colorBgContainer, token.colorPrimary, token.colorPrimaryBg])
 	// console.log("WeightProgressChart___data", progress, goalWeight)
 	return (
 		<Card size="small" variant="outlined">
-			<Title level={5}>Weight Progress</Title>
+			<Title level={5}>{t('report.charts.weightProgress')}</Title>
 			<Line {...config} />
 		</Card>
 	)

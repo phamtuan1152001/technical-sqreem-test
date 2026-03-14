@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Alert, Button, Card, Col, Row, Space, Spin, Typography, theme } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../app/hooks'
 import { exportHealthReportPdf } from '../utils/export-pdf'
 
@@ -20,6 +21,7 @@ const { Title, Text } = Typography
 
 const ReportPage = () => {
 	const { token } = theme.useToken()
+	const { t } = useTranslation()
 	const { report, loading, error } = useAppSelector((state) => state.healthReport)
 	const containerRef = useRef<HTMLDivElement>(null)
 
@@ -29,7 +31,7 @@ const ReportPage = () => {
 
 	if (loading) {
 		return (
-			<Card variant="outlined" size="small">
+			<Card variant="outlined" size="small" style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
 				<Space orientation="vertical" size={16} style={{ width: '100%' }}>
 					<SpinnerContent />
 				</Space>
@@ -41,18 +43,25 @@ const ReportPage = () => {
 		<Card variant="outlined" size="small" className='report-page-wrapper'>
 			<div ref={containerRef} style={{ padding: 0, background: token.colorBgContainer }} className='report-page-wrapper_content'>
 				<Row justify="space-between" align="middle" style={{ paddingBottom: 12 }}>
-					<Title level={4}>Health Intelligence Dashboard</Title>
+					<Title level={4}>{t('report.title')}</Title>
 					<Button className="no-export" type="primary" icon={<DownloadOutlined />} onClick={handleExport} disabled={!report}>
-						Export as PDF
+						{t('report.exportPdf')}
 					</Button>
 				</Row>
 
 				{error && (
-					<Alert type="error" message="Unable to fetch report" description={error} showIcon closable style={{ marginBottom: 8 }} />
+					<Alert
+						type="error"
+						message={t('report.fetchErrorTitle')}
+						description={t(error, { defaultValue: error })}
+						showIcon
+						closable
+						style={{ marginBottom: 8 }}
+					/>
 				)}
 
 				{!report ? (
-					<Text type="secondary">Complete the form to trigger the AI-generated insights.</Text>
+					<Text type="secondary">{t('report.empty')}</Text>
 				) : (
 					<div className='report-page-wrapper_body'>
 						<div className="pdf-section">
@@ -105,11 +114,14 @@ const ReportPage = () => {
 	)
 }
 
-const SpinnerContent = () => (
-	<Space orientation="vertical" size={8} align="center" style={{ width: '100%' }}>
-		<Spin />
-		<Text type="secondary">Generating your health report...</Text>
-	</Space>
-)
+const SpinnerContent = () => {
+	const { t } = useTranslation()
+	return (
+		<Space orientation="vertical" size={8} align="center" style={{ width: '100%' }}>
+			<Spin />
+			<Text type="secondary">{t('report.loading')}</Text>
+		</Space>
+	)
+}
 
 export default ReportPage

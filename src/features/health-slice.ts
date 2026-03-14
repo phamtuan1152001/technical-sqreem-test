@@ -17,7 +17,9 @@ const initialState: HealthReportState = {
 const healthSlice = createSlice({
 	name: 'healthReport',
 	initialState,
-	reducers: {},
+	reducers: {
+		resetHealthReport: () => initialState,
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(generateHealthReport.pending, (state) => {
@@ -30,9 +32,10 @@ const healthSlice = createSlice({
 			})
 			.addCase(generateHealthReport.rejected, (state, action) => {
 				state.loading = false
-				state.error = action.payload ?? 'Unable to load a report right now.'
+				state.error = action.payload ?? 'errors.unableToLoadReport'
 			})
 	},
 })
 
+export const { resetHealthReport } = healthSlice.actions
 export default healthSlice.reducer

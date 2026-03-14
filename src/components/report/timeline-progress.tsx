@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Card, Progress, Typography, theme } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 const { Title, Text } = Typography
 
@@ -9,6 +10,7 @@ interface TimelineProgressProps {
 
 const TimelineProgress = ({ estimatedWeeksToGoal }: TimelineProgressProps) => {
 	const { token } = theme.useToken()
+	const { t } = useTranslation()
 
 	const timelinePercent = useMemo(() => {
 	if (!estimatedWeeksToGoal) return 0
@@ -17,10 +19,10 @@ const TimelineProgress = ({ estimatedWeeksToGoal }: TimelineProgressProps) => {
 	// console.log("TimelineProgress___data", estimatedWeeksToGoal)
 	return (
 		<Card size="small" variant="outlined">
-			<Title level={5}>Timeline</Title>
-			<Text type="secondary">Estimated weeks to goal</Text>
+			<Title level={5}>{t('report.timeline.title')}</Title>
+			<Text type="secondary">{t('report.timeline.estimatedWeeks')}</Text>
 			<Title level={3} style={{ marginTop: 4 }}>
-				{estimatedWeeksToGoal} weeks
+				{t('report.timeline.weeks', { count: estimatedWeeksToGoal })}
 			</Title>
 			<Progress
 				percent={timelinePercent}

@@ -2,12 +2,24 @@ import axios from 'axios'
 import type { HealthReport, HealthReportPayload } from '../features/types'
 import { fallbackLlmResponse } from '../constants'
 import { normalizeReport, parseLlmResult, parseResponse } from '../utils'
+import i18n, { LANGUAGE_STORAGE_KEY } from '../i18n'
 
 const OPENAI_URL = import.meta.env.VITE_OPENAI_API_URL
 const MODEL = 'gpt-4.1'
 
-const buildPrompt = (payload: HealthReportPayload) => {
-	return `You are a certified health coach. Return a single JSON object with the following keys: healthSummary (string), bmi (number), goalWeightKg (number), weeklyExercisePlan (array of { day, exercise, durationMinutes, caloriesBurned }), nutritionBreakdown (object with proteinPercent, carbsPercent, fatPercent), estimatedWeeksToGoal (number), weightProgress (array of { week, weightKg }), exerciseEffort (array of { day, caloriesBurned, durationMinutes }), bodyComposition (object with musclePercent, fatPercent, waterPercent, bonePercent), and activityComposition (object with cardio, strength, stretching, rest as numbers). Use the following user data to shape your recommendations: ${JSON.stringify(payload)}. Reply with JSON only.`
+const getPreferredLanguage = () => {
+	const i18nLanguage = i18n.resolvedLanguage || i18n.language
+	if (i18nLanguage) return i18nLanguage
+	if (typeof window === 'undefined') return 'en'
+	return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'en'
+}
+
+const buildPrompt = (payload: HealthReportPayload, language: string) => {
+	const languageInstruction = language.startsWith('vi')
+		? 'Respond in Vietnamese.'
+		: 'Respond in English.'
+
+	return `You are a certified health coach. Return a single JSON object with the following keys: healthSummary (string), bmi (number), goalWeightKg (number), weeklyExercisePlan (array of { day, exercise, durationMinutes, caloriesBurned }), nutritionBreakdown (object with proteinPercent, carbsPercent, fatPercent), estimatedWeeksToGoal (number), weightProgress (array of { week, weightKg }), exerciseEffort (array of { day, caloriesBurned, durationMinutes }), bodyComposition (object with musclePercent, fatPercent, waterPercent, bonePercent), and activityComposition (object with cardio, strength, stretching, rest as numbers). Use the following user data to shape your recommendations: ${JSON.stringify(payload)}. ${languageInstruction} Reply with JSON only.`
 }
 
 export const fetchHealthReport = async (payload: HealthReportPayload): Promise<HealthReport> => {
@@ -17,7 +29,7 @@ export const fetchHealthReport = async (payload: HealthReportPayload): Promise<H
 		return parseLlmResult(fallbackLlmResponse)
 	}
 
-	const prompt = buildPrompt(payload)
+	const prompt = buildPrompt(payload, getPreferredLanguage())
 	try {
 		const response = await axios.post(
 			OPENAI_URL,

@@ -10,7 +10,7 @@ export const generateHealthReport = createAsyncThunk<
 	try {
 		return await fetchHealthReport(payload)
 	} catch (error) {
-		const message = error instanceof Error ? error.message : 'Fail to fetch the LLM service.'
+		const message = error instanceof Error ? error.message : 'errors.failToFetchLlmService'
 		return rejectWithValue(message)
 	}
 })

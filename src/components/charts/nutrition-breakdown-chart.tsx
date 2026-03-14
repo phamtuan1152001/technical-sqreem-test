@@ -3,6 +3,7 @@ import { Card, Typography, theme } from 'antd'
 import { Pie } from '@ant-design/plots'
 import type { PieConfig } from '@ant-design/plots'
 import type { NutritionBreakdown } from '../../features/types'
+import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
 
@@ -17,14 +18,15 @@ interface NutritionDatum {
 
 const NutritionBreakdownChart = ({ nutrition }: NutritionBreakdownChartProps) => {
 	const { token } = theme.useToken()
+	const { t } = useTranslation()
 
 	const data: NutritionDatum[] = useMemo(() => {
 		return [
-			{ type: 'Protein', value: nutrition.proteinPercent },
-			{ type: 'Carbs', value: nutrition.carbsPercent },
-			{ type: 'Fat', value: nutrition.fatPercent },
+			{ type: t('report.charts.labels.protein'), value: nutrition.proteinPercent },
+			{ type: t('report.charts.labels.carbs'), value: nutrition.carbsPercent },
+			{ type: t('report.charts.labels.fat'), value: nutrition.fatPercent },
 		]
-	}, [nutrition])
+	}, [nutrition, t])
 
 	const config: PieConfig = useMemo(() => ({
 		data,
@@ -58,7 +60,7 @@ const NutritionBreakdownChart = ({ nutrition }: NutritionBreakdownChartProps) =>
 	// console.log("NutritionBreakdownChart___data", nutrition, data)
 	return (
 		<Card size="small" variant="outlined">
-			<Title level={5}>Nutrition Breakdown</Title>
+			<Title level={5}>{t('report.charts.nutritionBreakdown')}</Title>
 			<Pie {...config} />
 		</Card>
 	)
