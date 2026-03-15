@@ -5,7 +5,7 @@
 ### 1. Requirements
 
 - Node.js `20+`
-- npm `10+` (included in newer Node.js versions)
+- npm `10+`
 
 Quick check:
 
@@ -14,52 +14,60 @@ node -v
 npm -v
 ```
 
-### 2. Install dependencies
-
-From the project root:
+### 2. Install
 
 ```bash
 npm install
 ```
 
-### 3. Environment variables (optional)
+### 3. Environment variables
 
-The project supports OpenAI API calls via:
+Create/update `.env`:
 
-- `VITE_OPENAI_API_KEY` (this secret key will be shared in email)
-- `VITE_OPENAI_API_URL` (default: `https://api.openai.com/v1/responses`)
-
-At the moment, `src/services/llm-service.ts` sets `apiKey` to an empty string, so the app uses fallback sample data.
-
-To enable real API calls:
-
-1. Update `.env` with a valid key.
-2. In `src/services/llm-service.ts`, change:
-
-```ts
-const apiKey = ""
+```bash
+VITE_OPENAI_API_KEY=your_openai_api_key (This key will be attched on mail)
+VITE_OPENAI_API_URL=https://api.openai.com/v1/responses
 ```
 
-to:
+### 4. Current LLM flow in code
+
+- Active thunk: `src/features/health-thunk.ts` -> `generateHealthReport(...)`
+- Active service flow: `src/services/llm-service.ts` -> `generateHealthReport(...)`
+- API format: OpenAI Responses API with `text.format.type = "json_schema"`
+- JSON schema source: `healthReportJsonSchema` in `src/constants/index.ts`
+
+Important:
+
+- In current code, `apiKey` is intentionally empty:
+
+```ts
+const apiKey = /* import.meta.env.VITE_OPENAI_API_KEY */ ""
+```
+
+- Because of that, app returns `fallbackLLMResponseVer2` instead of calling OpenAI.
+
+To enable real API calls, change it to:
 
 ```ts
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 ```
 
-### 4. Run locally
+### 5. Run local
 
 ```bash
-npm run dev
+npm run dev      # start local dev server
 ```
 
-Default local URL: `http://localhost:5173`
+Default dev URL: `http://localhost:5173`
+
+---
 
 ## Tiếng Việt
 
 ### 1. Yêu cầu môi trường
 
 - Node.js `20+`
-- npm `10+` (di kem Node.js moi)
+- npm `10+`
 
 Kiểm tra nhanh:
 
@@ -68,42 +76,48 @@ node -v
 npm -v
 ```
 
-### 2. Cài thư viện
-
-Trong thư mục dự án:
+### 2. Cài đặt
 
 ```bash
 npm install
 ```
 
-### 3. Cấu hình biến môi trường (tuỳ chọn)
+### 3. Biến môi trường
 
-Dự án có hỗ trợ gọi OPENAI qua biến:
+Cập nhật file `.env`:
 
-- `VITE_OPENAI_API_KEY` (khoá bảo mật này sẽ được đính kèm trong mail)
-- `VITE_OPENAI_API_URL` (mặc định: `https://api.openai.com/v1/responses`)
-
-Hiện tại trong code, file `src/services/llm-service.ts` đang để `apiKey` rỗng nên app sẽ dùng dữ liệu fallback mẫu.
-
-Nếu muốn bật gọi API thật:
-
-1. Cập nhật `.env` với khoá hợp lệ.
-2. Trong `src/services/llm-service.ts`, đổi:
-
-```ts
-const apiKey = ""
+```bash
+VITE_OPENAI_API_KEY=your_openai_api_key (Khoá bảo mật này sẽ được đính kèm tại mail)
+VITE_OPENAI_API_URL=https://api.openai.com/v1/responses
 ```
 
-thành:
+### 4. Luồng LLM hiện tại
+
+- Thunk đang dùng: `src/features/health-thunk.ts` -> `generateHealthReport(...)`
+- Service đang dùng: `src/services/llm-service.ts` -> `generateHealthReport(...)`
+- Đang gọi OpenAI Responses API theo dạng `json_schema`
+- Schema được định nghĩa trong `src/constants/index.ts` (`healthReportJsonSchema`)
+
+Lưu ý:
+
+- Hiện tại `apiKey` trong code đang để rỗng:
+
+```ts
+const apiKey = /* import.meta.env.VITE_OPENAI_API_KEY */ ""
+```
+
+- Vì vậy app se dùng `fallbackLLMResponseVer2`, không gọi API thật.
+
+Nếu muốn bật gọi API thật, đổi thành:
 
 ```ts
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 ```
 
-### 4. Chạy dự án ở local
+### 5. Câu lệnh
 
 ```bash
-npm run dev
+npm run dev      # chạy local
 ```
 
-Mặc định ứng dụng chạy tại: `http://localhost:5173`
+Mặc định chạy ở local URL: `http://localhost:5173`
