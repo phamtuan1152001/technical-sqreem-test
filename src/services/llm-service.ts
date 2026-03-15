@@ -46,15 +46,15 @@ export const fetchHealthReport = async (payload: HealthReportPayload): Promise<H
 			},
 		)
 
-		const text = parseResponse(response.data)
+		const text = parseResponse(response.data) /* undefined */
 		if (!text) {
-			throw new Error('LLM returned an unexpected payload.')
+			throw new Error('errors.unexpectedError')
 		}
 
 		const parsed = JSON.parse(text) as HealthReport
 		return normalizeReport(parsed)
 	} catch (error) {
 		console.error('Fail to load LLM service.', error)
-		return parseLlmResult(fallbackLlmResponse)
+		throw new Error('errors.unexpectedError')
 	}
 }

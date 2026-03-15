@@ -52,7 +52,7 @@ const ReportPage = () => {
 				{error && (
 					<Alert
 						type="error"
-						message={t('report.fetchErrorTitle')}
+						title={t('report.fetchErrorTitle')}
 						description={t(error)}
 						showIcon
 						closable
@@ -60,7 +60,7 @@ const ReportPage = () => {
 				)}
 
 				{!report ? (
-					<Text type="secondary">{t('report.empty')}</Text>
+					<Text style={{marginTop: 16}} type="secondary">{t('report.empty')}</Text>
 				) : (
 					<div className='report-page-wrapper_body'>
 						<div className="pdf-section">

@@ -94,6 +94,7 @@ const en = {
 		unableToLoadReport: 'Unable to load a report right now.',
 		failToFetchLlmService: 'Fail to fetch the LLM service.',
 		llmUnexpectedPayload: 'LLM returned an unexpected payload.',
+		unexpectedError: "An error has occurred. Please try again later."
 	},
 	days: {
 		monday: 'Monday',

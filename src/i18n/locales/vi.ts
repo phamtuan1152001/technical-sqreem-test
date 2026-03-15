@@ -94,6 +94,7 @@ const vi = {
 		unableToLoadReport: 'Không thể tải báo cáo lúc này.',
 		failToFetchLlmService: 'Không thể gọi dịch vụ LLM.',
 		llmUnexpectedPayload: 'LLM trả về dữ liệu không đúng định dạng.',
+		unexpectedError: "Có lỗi xảy ra. Xin vui lòng thử lại sau."
 	},
 	days: {
 		monday: 'Thứ Hai',
