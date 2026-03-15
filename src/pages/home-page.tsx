@@ -1,10 +1,11 @@
-import { Col, Layout, Row, Select, Space, Typography, Grid } from 'antd'
+import { ArrowUpOutlined } from '@ant-design/icons'
+import { Button, Col, Grid, Layout, Row, Select, Space, Typography } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import UserInputForm from '../components/forms/user-input-form'
-import ReportPage from './report-page'
 import { useAppDispatch } from '../app/hooks'
+import UserInputForm from '../components/forms/user-input-form'
 import { resetHealthReport } from '../features/health-slice'
-import { useMemo } from 'react'
+import ReportPage from './report-page'
 
 const { Content } = Layout
 const { Title, Paragraph } = Typography
@@ -16,21 +17,39 @@ const HomePage = () => {
 	const isMobile = useMemo(() => xs, [xs])
 	const isTablet = useMemo(() => md && sm, [md, sm])
 	const isDesktop = useMemo(() => lg && md && sm && xl && xxxl, [lg, md, sm, xl, xxxl])
+	const [showScrollTop, setShowScrollTop] = useState(false)
+
+	useEffect(() => {
+		const handleScroll = () => {
+			setShowScrollTop(window.scrollY > 300)
+		}
+
+		handleScroll()
+		window.addEventListener('scroll', handleScroll)
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll)
+		}
+	}, [])
 
 	const handleChangeLanguage = async (language: string) => {
 		dispatch(resetHealthReport())
 		await i18n.changeLanguage(language)
 	}
 
+	const handleScrollToTop = () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}
+
 	return (
-		<Layout 
-			style={{ 
-				height: isDesktop 
-					? '100vh' 
-					: isMobile || isTablet 
-						? '100%' 
-						: 'auto', 
-				background: '#f4f6fa' 
+		<Layout
+			style={{
+				height: isDesktop
+					? '100vh'
+					: isMobile || isTablet
+						? '100%'
+						: 'auto',
+				background: '#f4f6fa',
 			}}
 		>
 			<Content
@@ -66,9 +85,9 @@ const HomePage = () => {
 						</Space>
 					</Col>
 				</Row>
-				<Row 
-					key={i18n.resolvedLanguage ?? 'vi'} 
-					gutter={[24, 24]} 
+				<Row
+					key={i18n.resolvedLanguage ?? 'vi'}
+					gutter={[24, 24]}
 					style={{ flex: 1 }}
 				>
 					<Col xs={24} xl={8} style={{ display: 'flex', height: 'fit-content' }}>
@@ -79,6 +98,21 @@ const HomePage = () => {
 					</Col>
 				</Row>
 			</Content>
+
+			{showScrollTop && (
+				<Button
+					type="primary"
+					shape="circle"
+					icon={<ArrowUpOutlined />}
+					onClick={handleScrollToTop}
+					style={{
+						position: 'fixed',
+						right: 24,
+						bottom: 24,
+						zIndex: 1000,
+					}}
+				/>
+			)}
 		</Layout>
 	)
 }
