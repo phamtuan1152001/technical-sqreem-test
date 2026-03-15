@@ -62,12 +62,11 @@ const ReportPage = () => {
 				{!report ? (
 					<Text style={{marginTop: 16}} type="secondary">{t('report.empty')}</Text>
 				) : (
-					<div className='report-page-wrapper_body'>
-						<div className="pdf-section">
-							<HealthSummary bmi={report.bmi} summary={report.healthSummary} />
-						</div>
+						<div className='report-page-wrapper_body'>
+							<div className="pdf-section">
+								<HealthSummary bmi={report.bmi} summary={report.healthSummary} />
+							</div>
 
-						<div className='report-page-wrapper_body_info'>
 							<div className="pdf-section">
 								<TimelineProgress estimatedWeeksToGoal={report.estimatedWeeksToGoal} />
 							</div>
@@ -106,8 +105,7 @@ const ReportPage = () => {
 								</Col>
 							</Row>
 						</div>
-					</div>
-				)}
+					)}
 			</div>
 		</Card>
 	)

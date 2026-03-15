@@ -1,9 +1,10 @@
-import { Col, Layout, Row, Select, Space, Typography } from 'antd'
+import { Col, Layout, Row, Select, Space, Typography, Grid } from 'antd'
 import { useTranslation } from 'react-i18next'
 import UserInputForm from '../components/forms/user-input-form'
 import ReportPage from './report-page'
 import { useAppDispatch } from '../app/hooks'
 import { resetHealthReport } from '../features/health-slice'
+import { useMemo } from 'react'
 
 const { Content } = Layout
 const { Title, Paragraph } = Typography
@@ -11,6 +12,10 @@ const { Title, Paragraph } = Typography
 const HomePage = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useAppDispatch()
+	const { lg, md, sm, xl, xs, xxxl } = Grid.useBreakpoint()
+	const isMobile = useMemo(() => xs, [xs])
+	const isTablet = useMemo(() => md && sm, [md, sm])
+	const isDesktop = useMemo(() => lg && md && sm && xl && xxxl, [lg, md, sm, xl, xxxl])
 
 	const handleChangeLanguage = async (language: string) => {
 		dispatch(resetHealthReport())
@@ -18,7 +23,16 @@ const HomePage = () => {
 	}
 
 	return (
-		<Layout style={{ height: '100vh', background: '#f4f6fa' }}>
+		<Layout 
+			style={{ 
+				height: isDesktop 
+					? '100vh' 
+					: isMobile || isTablet 
+						? '100%' 
+						: 'auto', 
+				background: '#f4f6fa' 
+			}}
+		>
 			<Content
 				style={{
 					padding: '24px',
@@ -52,11 +66,15 @@ const HomePage = () => {
 						</Space>
 					</Col>
 				</Row>
-				<Row key={i18n.resolvedLanguage ?? 'vi'} gutter={[24, 24]} style={{ flex: 1, minHeight: 0 }}>
-					<Col xs={24} xl={8} style={{ display: 'flex', minHeight: 0, height: '100%' }}>
+				<Row 
+					key={i18n.resolvedLanguage ?? 'vi'} 
+					gutter={[24, 24]} 
+					style={{ flex: 1 }}
+				>
+					<Col xs={24} xl={8} style={{ display: 'flex', height: 'fit-content' }}>
 						<UserInputForm />
 					</Col>
-					<Col xs={24} xl={16} style={{ display: 'flex', minHeight: 0, height: '100%' }}>
+					<Col xs={24} xl={16} style={{ display: 'flex', height: '100%' }}>
 						<ReportPage />
 					</Col>
 				</Row>
