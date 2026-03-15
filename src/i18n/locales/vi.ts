@@ -105,6 +105,12 @@ const vi = {
 		saturday: 'Thứ Bảy',
 		sunday: 'Chủ Nhật',
 	},
+	common: {
+		notify: {
+			title: 'Thông báo',
+			move_to_desktop_export_pdf: "Vui lòng dùng thiết bị desktop để sử dụng tính năng này"
+		}
+	}
 }
 
 export default vi

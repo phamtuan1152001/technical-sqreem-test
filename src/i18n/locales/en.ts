@@ -105,6 +105,12 @@ const en = {
 		saturday: 'Saturday',
 		sunday: 'Sunday',
 	},
+	common: {
+		notify: {
+			title: 'Notification',
+			move_to_desktop_export_pdf: "Please use a desktop device to use this feature."
+		}
+	}
 }
 
 export default en

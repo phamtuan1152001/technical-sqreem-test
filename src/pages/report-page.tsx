@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { Alert, Button, Card, Col, Row, Space, Spin, Typography, theme } from 'antd'
+import { useMemo, useRef } from 'react'
+import { Alert, Button, Card, Col, Grid, Row, Space, Spin, Typography, notification, theme } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../app/hooks'
@@ -19,19 +19,35 @@ import WeightProgressChart from '../components/charts/weight-progress-chart'
 
 const { Title, Text } = Typography
 
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
 const ReportPage = () => {
 	const { token } = theme.useToken()
 	const { t } = useTranslation()
 	const { report, loading, error } = useAppSelector((state) => state.healthReport)
+	const { xs } = Grid.useBreakpoint()
+	const isMobile = useMemo(() => xs, [xs])
 	const containerRef = useRef<HTMLDivElement>(null)
+	const [api, contextHolder] = notification.useNotification();
+
+	const openNotificationWithIcon = (type: NotificationType = 'warning') => {
+		api[type]({
+			title: t('common.notify.title'),
+			description: t('common.notify.move_to_desktop_export_pdf'),
+		});
+	};
 
 	const handleExport = async () => {
+		if (isMobile) {
+			openNotificationWithIcon('warning')
+			return
+		}
 		await exportHealthReportPdf(containerRef.current)
 	}
 
 	if (loading) {
 		return (
-			<Card variant="outlined" size="small" style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+			<Card variant="outlined" size="small" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
 				<Space orientation="vertical" size={16} style={{ width: '100%' }}>
 					<SpinnerContent />
 				</Space>
@@ -41,6 +57,7 @@ const ReportPage = () => {
 
 	return (
 		<Card variant="outlined" size="small" className='report-page-wrapper'>
+			{contextHolder}
 			<div ref={containerRef} style={{ padding: 0, background: token.colorBgContainer }} className='report-page-wrapper_content'>
 				<Row justify="space-between" align="middle" style={{ paddingBottom: 12 }}>
 					<Title level={4}>{t('report.title')}</Title>
@@ -60,52 +77,52 @@ const ReportPage = () => {
 				)}
 
 				{!report ? (
-					<Text style={{marginTop: 16}} type="secondary">{t('report.empty')}</Text>
+					<Text style={{ marginTop: 16 }} type="secondary">{t('report.empty')}</Text>
 				) : (
-						<div className='report-page-wrapper_body'>
-							<div className="pdf-section">
-								<HealthSummary bmi={report.bmi} summary={report.healthSummary} infoUser={report.infoUser}/>
-							</div>
-
-							<div className="pdf-section">
-								<TimelineProgress estimatedWeeksToGoal={report.estimatedWeeksToGoal} />
-							</div>
-
-							<div className="pdf-section">
-								<ExerciseCalenderTable weeklyExercisePlan={report.weeklyExercisePlan} />
-							</div>
-
-							<Row gutter={[16, 16]}>
-								<Col xs={24} md={12} xl={8}>
-									<div className="pdf-section">
-										<NutritionBreakdownChart nutrition={report.nutritionBreakdown} />
-									</div>
-								</Col>
-								<Col xs={24} md={12} xl={16}>
-									<div className="pdf-section">
-										<ExerciseEffortChart effort={report.exerciseEffort} />
-									</div>
-								</Col>
-							</Row>
-
-							<div className="pdf-section">
-								<WeightProgressChart progress={report.weightProgress} goalWeight={report.goalWeightKg} />
-							</div>
-
-							<Row gutter={[16, 16]}>
-								<Col xs={24} lg={12}>
-									<div className="pdf-section">
-										<ActivityCompositionChart composition={report.activityComposition} />
-									</div>
-								</Col>
-								<Col xs={24} lg={12}>
-									<div className="pdf-section">
-										<BodyCompositionChart bodyComposition={report.bodyComposition} />
-									</div>
-								</Col>
-							</Row>
+					<div className='report-page-wrapper_body'>
+						<div className="pdf-section">
+							<HealthSummary bmi={report.bmi} summary={report.healthSummary} infoUser={report.infoUser} />
 						</div>
-					)}
+
+						<div className="pdf-section">
+							<TimelineProgress estimatedWeeksToGoal={report.estimatedWeeksToGoal} />
+						</div>
+
+						<div className="pdf-section">
+							<ExerciseCalenderTable weeklyExercisePlan={report.weeklyExercisePlan} />
+						</div>
+
+						<Row gutter={[16, 16]}>
+							<Col xs={24} md={12} xl={8}>
+								<div className="pdf-section">
+									<NutritionBreakdownChart nutrition={report.nutritionBreakdown} />
+								</div>
+							</Col>
+							<Col xs={24} md={12} xl={16}>
+								<div className="pdf-section">
+									<ExerciseEffortChart effort={report.exerciseEffort} />
+								</div>
+							</Col>
+						</Row>
+
+						<div className="pdf-section">
+							<WeightProgressChart progress={report.weightProgress} goalWeight={report.goalWeightKg} />
+						</div>
+
+						<Row gutter={[16, 16]}>
+							<Col xs={24} lg={12}>
+								<div className="pdf-section">
+									<ActivityCompositionChart composition={report.activityComposition} />
+								</div>
+							</Col>
+							<Col xs={24} lg={12}>
+								<div className="pdf-section">
+									<BodyCompositionChart bodyComposition={report.bodyComposition} />
+								</div>
+							</Col>
+						</Row>
+					</div>
+				)}
 			</div>
 		</Card>
 	)
