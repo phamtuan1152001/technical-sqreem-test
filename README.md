@@ -1,73 +1,109 @@
-# React + TypeScript + Vite
+# Technical Sqreem Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## English
 
-Currently, two official plugins are available:
+### 1. Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js `20+`
+- npm `10+` (included in newer Node.js versions)
 
-## React Compiler
+Quick check:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+node -v
+npm -v
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+From the project root:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### 3. Environment variables (optional)
+
+The project supports OpenAI API calls via:
+
+- `VITE_OPENAI_API_KEY` (this secret key will be shared in email)
+- `VITE_OPENAI_API_URL` (default: `https://api.openai.com/v1/responses`)
+
+At the moment, `src/services/llm-service.ts` sets `apiKey` to an empty string, so the app uses fallback sample data.
+
+To enable real API calls:
+
+1. Update `.env` with a valid key.
+2. In `src/services/llm-service.ts`, change:
+
+```ts
+const apiKey = ""
+```
+
+to:
+
+```ts
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+```
+
+### 4. Run locally
+
+```bash
+npm run dev
+```
+
+Default local URL: `http://localhost:5173`
+
+## Tiếng Việt
+
+### 1. Yêu cầu môi trường
+
+- Node.js `20+`
+- npm `10+` (di kem Node.js moi)
+
+Kiểm tra nhanh:
+
+```bash
+node -v
+npm -v
+```
+
+### 2. Cài thư viện
+
+Trong thư mục dự án:
+
+```bash
+npm install
+```
+
+### 3. Cấu hình biến môi trường (tuỳ chọn)
+
+Dự án có hỗ trợ gọi OPENAI qua biến:
+
+- `VITE_OPENAI_API_KEY` (khoá bảo mật này sẽ được đính kèm trong mail)
+- `VITE_OPENAI_API_URL` (mặc định: `https://api.openai.com/v1/responses`)
+
+Hiện tại trong code, file `src/services/llm-service.ts` đang để `apiKey` rỗng nên app sẽ dùng dữ liệu fallback mẫu.
+
+Nếu muốn bật gọi API thật:
+
+1. Cập nhật `.env` với khoá hợp lệ.
+2. Trong `src/services/llm-service.ts`, đổi:
+
+```ts
+const apiKey = ""
+```
+
+thành:
+
+```ts
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+```
+
+### 4. Chạy dự án ở local
+
+```bash
+npm run dev
+```
+
+Mặc định ứng dụng chạy tại: `http://localhost:5173`
