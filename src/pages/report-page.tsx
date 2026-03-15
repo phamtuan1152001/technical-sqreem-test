@@ -64,7 +64,7 @@ const ReportPage = () => {
 				) : (
 						<div className='report-page-wrapper_body'>
 							<div className="pdf-section">
-								<HealthSummary bmi={report.bmi} summary={report.healthSummary} />
+								<HealthSummary bmi={report.bmi} summary={report.healthSummary} infoUser={report.infoUser}/>
 							</div>
 
 							<div className="pdf-section">

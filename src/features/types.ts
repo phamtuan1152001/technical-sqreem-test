@@ -46,6 +46,7 @@ export interface BodyComposition {
 }
 
 export interface HealthReport {
+	infoUser: HealthReportPayload,
 	healthSummary: string
 	bmi: number
 	weeklyExercisePlan: WeeklyExercisePlanItem[]
