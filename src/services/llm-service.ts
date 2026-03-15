@@ -16,15 +16,95 @@ const getPreferredLanguage = () => {
 
 const buildPrompt = (payload: HealthReportPayload, language: string) => {
 	const languageInstruction = language.startsWith('vi')
-		? 'Respond in Vietnamese.'
-		: 'Respond in English.'
+		? 'Write all user-facing text values in Vietnamese.'
+		: 'Write all user-facing text values in English.'
 
-	return `You are a certified health coach. Return a single JSON object with the following keys: infoUser (object with name, age, weightKg, heightCm, goalWeightKg, availableMinutesPerDay) healthSummary (string), bmi (number), goalWeightKg (number), weeklyExercisePlan (array of { day, exercise, durationMinutes, caloriesBurned }), nutritionBreakdown (object with proteinPercent, carbsPercent, fatPercent), estimatedWeeksToGoal (number), weightProgress (array of { week, weightKg }), exerciseEffort (array of { day, caloriesBurned, durationMinutes }), bodyComposition (object with musclePercent, fatPercent, waterPercent, bonePercent), and activityComposition (object with cardio, strength, stretching, rest as numbers). Use the following user data to shape your recommendations: ${JSON.stringify(payload)}. ${languageInstruction} Reply with JSON only.`
+	return `
+You are a certified health coach and fitness advisor.
+
+Return exactly one valid JSON object.
+Do not wrap the response in markdown.
+Do not include any explanation, notes, or extra text outside the JSON.
+
+Use exactly this JSON structure and property names:
+
+{
+  "infoUser": {
+    "name": "string",
+    "age": "number",
+    "weightKg": "number",
+    "heightCm": "number",
+    "goalWeightKg": "number",
+    "availableMinutesPerDay": "number"
+  },
+  "healthSummary": "string",
+  "bmi": "number",
+  "goalWeightKg": "number",
+  "weeklyExercisePlan": [
+    {
+      "day": "string",
+      "exercise": "string",
+      "durationMinutes": "number",
+      "caloriesBurned": "number"
+    }
+  ],
+  "nutritionBreakdown": {
+    "proteinPercent": "number",
+    "carbsPercent": "number",
+    "fatPercent": "number"
+  },
+  "estimatedWeeksToGoal": "number",
+  "weightProgress": [
+    {
+      "week": "number",
+      "weightKg": "number"
+    }
+  ],
+  "exerciseEffort": [
+    {
+      "day": "string",
+      "caloriesBurned": "number",
+      "durationMinutes": "number"
+    }
+  ],
+  "bodyComposition": {
+    "musclePercent": "number",
+    "fatPercent": "number",
+    "waterPercent": "number",
+    "bonePercent": "number"
+  },
+  "activityComposition": {
+    "cardio": "number",
+    "strength": "number",
+    "stretching": "number",
+    "rest": "number"
+  }
+}
+
+Rules:
+- Keep all JSON property names exactly as written in English.
+- ${languageInstruction}
+- Calculate BMI using: weightKg / ((heightCm / 100) ^ 2).
+- weeklyExercisePlan must contain exactly 7 items, one for each day of the week.
+- exerciseEffort must contain exactly 7 items, matching the same days as weeklyExercisePlan.
+- weightProgress must start at week 1 and continue until estimatedWeeksToGoal.
+- estimatedWeeksToGoal should be realistic and based on a safe weight-loss pace.
+- nutritionBreakdown percentages must sum to 100.
+- bodyComposition percentages must sum to 100.
+- activityComposition values must sum to 100.
+- All numeric fields must be valid JSON numbers, not strings.
+- Make recommendations practical, safe, and realistic for the user's availableMinutesPerDay.
+- Do not include null unless absolutely necessary.
+- Respond with JSON only.
+
+User data:
+${JSON.stringify(payload, null, 2)}
+`.trim()
 }
 
 export const fetchHealthReport = async (payload: HealthReportPayload): Promise<HealthReport> => {
 	// console.log("fetchHealthReport__payload", payload)
-	const apiKey = /* import.meta.env.VITE_OPENAI_API_KEY */ ""
+	const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 	if (!apiKey) {
 		return parseLlmResult(fallbackLlmResponse)
 	}
