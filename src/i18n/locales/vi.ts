@@ -110,7 +110,8 @@ const vi = {
 			title: 'Thông báo',
 			move_to_desktop_export_pdf: "Vui lòng dùng thiết bị desktop để sử dụng tính năng này"
 		}
-	}
+	},
+	body_max_index: "Chỉ số khối cơ thể"
 }
 
 export default vi

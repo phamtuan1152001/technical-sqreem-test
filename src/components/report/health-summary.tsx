@@ -18,7 +18,7 @@ const HealthSummary = ({ bmi, summary, infoUser }: HealthSummaryProps) => {
     <Card size="small" style={{ backgroundColor: token.colorBgElevated }}>
       <Row gutter={[12, 12]}>
         <Col xs={24} md={12}>
-          <Row gutter={[6, 6]}>
+          <Row gutter={[2, 2]}>
             <Col xs={12}>
               <Text type="secondary" style={{fontWeight: 700, paddingRight: 6}}>{t('form.fields.name')}:</Text>
               <Text type="secondary">{infoUser.name}</Text>
@@ -45,7 +45,7 @@ const HealthSummary = ({ bmi, summary, infoUser }: HealthSummaryProps) => {
             </Col>
           </Row>
           <div style={{marginTop: 12}}>
-            <Text type="secondary" style={{fontWeight: 700}}>{t('report.summary.bmi')}:</Text>
+            <Text type="secondary" style={{fontWeight: 700}}>{t('report.summary.bmi')} ({t('body_max_index')}):</Text>
             <Title level={2}>{bmi.toFixed(1)}</Title>
           </div>
         </Col>

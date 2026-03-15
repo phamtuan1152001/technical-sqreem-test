@@ -110,7 +110,8 @@ const en = {
 			title: 'Notification',
 			move_to_desktop_export_pdf: "Please use a desktop device to use this feature."
 		}
-	}
+	},
+	body_max_index: "Body Mass Index"
 }
 
 export default en
